@@ -275,3 +275,7 @@ class ServiceOrderConsumtion_delete(DeleteView):
         serviceOrder = self.get_object()
         return reverse_lazy('service_orders:consumptionPanel',args=[serviceOrder.service_order.id])
     
+
+def testing(request):
+    pass
+    
