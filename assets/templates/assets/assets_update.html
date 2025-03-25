@@ -1,0 +1,45 @@
+{% extends 'base_adminv2.html' %}
+{% load utils %}
+{% block title %}Asset - Edición de Asset{% endblock title %}
+{% block body %}
+    <div class='row'>
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class='card-title'> <strong>Actualización de Cliente/Proveedor</strong>({{asset.document_id}})</h3>
+                    <h6 class="card-subtitle mb-2 text-muted"> <strong>Modulo:</strong> Assets</h6>
+                        <a href='{% url "assets:grid" %}' class="btn btn-warning"><i class="bi bi-arrow-left"></i> Volver al listado</a>
+                    <hr>
+                    {% include 'message.html' %}
+                    <form method='post' novalidate>
+                        {% csrf_token %}
+                        {% for field in form %}
+                            <div class='mb-3'>
+                                <label for="{{field.id_for_label}}">{{field.label}}</label>
+                                {{field|setValidationClass}}
+                                {% if field.data == None %}
+                                    <div id="{{field.auto_id}}_helptext" class="form-text">
+                                        {{field.help_text}}
+                                    </div>   
+                                {% endif %}
+                                {% if field.errors %}
+                                    {% for error in field.errors %}
+                                        <div class="invalid-feedback">
+                                            {{error}}
+                                        </div>
+                                    {% endfor %}
+                                    {% else %}
+                                        <div class='valid-feedback'>¡Se ve bien!</div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                        <div class="mb-3">
+                            <button type="submit" class="btn btn-success"><i class="bi bi-pencil"></i> Actualizar</button>
+                        </div>
+                    </form>
+                   
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock body %}

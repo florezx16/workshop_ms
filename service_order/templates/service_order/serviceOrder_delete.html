@@ -1,0 +1,30 @@
+{% extends 'base_adminv2.html' %}
+{% load utils %}
+{% block title %}Ordernes de servicio - Eliminar Orden{% endblock title %}
+{% block body %}
+    <div class='row'>
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class='card-title'><strong>Eliminación de Orden</strong></h3>
+                    <h6 class="card-subtitle mb-2 text-muted"> <strong>Modulo:</strong> Ordenes de servicio</h6>
+                        <a href='{% url "service_orders:grid" %}' class="btn btn-warning"><i class="bi bi-arrow-left"></i> Volver al listado</a>
+                    <hr>
+                    <div class="alert alert-warning" role="alert">
+                        <h4 class="alert-heading"> <i class="bi bi-exclamation-triangle"></i> <strong>¡Alto ahí!</strong>  </h4>
+                        <p>La siguiente orden de servicio (<strong>ID:{{serviceOrder.id}} - Cliente:{{serviceOrder.customer}}</strong>) esta a punto de ser deshabilitada y sera a partir de ahora inaccesible.</p>
+                        <hr>
+                        <p class="mb-0">¿Estas seguro de que deseas continuar?</p>
+                        <div class='mt-2'>
+                            <form method='post'>
+                                {% csrf_token %}
+                                <button class='btn btn-danger' type='submit'> <i class="bi bi-trash"></i> Si, deshabilitar</button>
+                            </form>
+                        </div>
+                    </div>
+                   
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock body %}

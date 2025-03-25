@@ -1,0 +1,43 @@
+{% extends 'base_adminv2.html' %}
+{% load utils %}
+{% block title %}Movimientos - Detalle de movimiento{% endblock title %}
+{% block body %}
+    <div class='row'>
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class='card-title'> <strong>Detalle de movimiento</strong>({{movement.id}})</h3>
+                    <h6 class="card-subtitle mb-2 text-muted"> <strong>Modulo:</strong> Inventario</h6>
+                        <a href='{% url "inventory:movements_grid" %}' class="btn btn-warning"><i class="bi bi-arrow-left"></i> Volver al listado</a>
+                    <hr>
+                    <form>
+                        <div class='mb-3'>
+                            <label class="form-label">ID</label>
+                            <input type="text" disabled class='form-control' value='{{movement.id}}'>
+                        </div>
+                        <div class='mb-3'>
+                            <label class="form-label">Código de inventario</label>
+                            <input type="text" disabled class='form-control' value='{{movement.inventory_code}}'>
+                        </div>
+                        <div class='mb-3'>
+                            <label class="form-label">Tipo de movimiento</label>
+                            <input type="text" disabled class='form-control' value='{{movement.get_type_display}}'>
+                        </div>
+                        <div class='mb-3'>
+                            <label class="form-label">Cantidad involucrada</label>
+                            <input type="text" disabled class='form-control' value='{{movement.quantity}}'>
+                        </div>
+                        <div class='mb-3'>
+                            <label class="form-label">Fecha/hora de creación</label>
+                            <input type="text" disabled class='form-control' value='{{movement.createtime}}'>
+                        </div>
+                        <div class='mb-3'>
+                            <label class="form-label">Información adicional</label>
+                            <textarea class='form-control' disabled cols='40' rows='3'>{{movement.description}}</textarea>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock body %}

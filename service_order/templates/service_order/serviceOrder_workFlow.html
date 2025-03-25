@@ -1,0 +1,103 @@
+{% extends 'base_adminv2.html' %}
+{% load utils %}
+{% block title %}Ordernes de servicio - Detalle Orden{% endblock title %}
+{% block body %}
+    <div class='row'>
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class='card-title'><strong>Detalle de Orden</strong>({{service_order.id}})</h3>
+                    <h6 class="card-subtitle mb-2 text-muted"> <strong>Modulo:</strong> Ordenes de servicio</h6>
+                        <a href='{% url "service_orders:grid" %}' class="btn btn-warning"><i class="bi bi-arrow-left"></i> Volver al listado</a>
+                    <hr>
+                    <ul class="nav nav-tabs">
+                        <li class="nav-item" role="presentation">
+                            <button type="button" class="nav-link disabled" id="new_resource_btn" data-bs-toggle="tab" data-bs-target="#add_resource">1. Registro</button>
+                        </li>
+                        <li class="nav-item">
+                            <button type="button" class="nav-link {% if service_order.flowStatus == 1 %} active {% else %} disabled {% endif %}" id="diagnose_btn" data-bs-toggle="tab" data-bs-target="#diagnose_resource">2. Diagnóstico</button>
+                        </li>
+                        <li class="nav-item">
+                            <button type="button" class="nav-link {% if service_order.flowStatus == 2 %} active {% else %} disabled {% endif %}" id="fix_btn" data-bs-toggle="tab" data-bs-target="#fix_resource">3. Reparación</button>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div id="add_resource" class="tab-pane fade mt-3" role="tabpanel">
+                            <div class="card card-body">
+                            </div>
+                        </div>
+
+                        <div id="diagnose_resource" class="tab-pane fade mt-3 {% if service_order.flowStatus == 1 %} active show {% endif %}">
+                            <div class="card card-body">
+                                <form method='post' enctype="multipart/form-data" novalidate>
+                                    {% if form and service_order.flowStatus == 1 %}
+                                        {% csrf_token %}
+                                        {% for field in form %}
+                                            <div class='mb-3'>
+                                                <label for="{{field.id_for_label}}">{{field.label}}</label>
+                                                {{field|setValidationClass}}
+                                                {% if field.data == None %}
+                                                    <div id="{{field.auto_id}}_helptext" class="form-text">
+                                                        {{field.help_text}}
+                                                    </div>   
+                                                {% endif %}
+                                                {% if field.errors %}
+                                                    {% for error in field.errors %}
+                                                        <div class="invalid-feedback">
+                                                            {{error}}
+                                                        </div>
+                                                    {% endfor %}
+                                                    {% else %}
+                                                        <div class='valid-feedback'>¡Se ve bien!</div>
+                                                {% endif %}
+                                            </div>
+                                        {% endfor %}
+                                        <div>
+                                            <button type="submit" class="btn btn-success"><i class="bi bi-plus-circle"></i> Diagnosticar</button>
+                                        </div>
+                                    {% endif %}
+                                </form>
+                            </div>
+                        </div>
+
+                        <div id="fix_resource" class="tab-pane fade mt-3 {% if service_order.flowStatus == 2 %} active show {% endif %}">
+                            <div class="card card-body">
+                                <form method='post' enctype="multipart/form-data" novalidate>
+                                    {% if form and service_order.flowStatus == 2 %}
+                                        {% csrf_token %}
+                                        {% for field in form %}
+                                            <div class='mb-3'>
+                                                <label for="{{field.id_for_label}}">{{field.label}}</label>
+                                                {{field|setValidationClass}}
+                                                {% if field.data == None %}
+                                                    <div id="{{field.auto_id}}_helptext" class="form-text">
+                                                        {{field.help_text}}
+                                                    </div>   
+                                                {% endif %}
+                                                {% if field.errors %}
+                                                    {% for error in field.errors %}
+                                                        <div class="invalid-feedback">
+                                                            {{error}}
+                                                        </div>
+                                                    {% endfor %}
+                                                    {% else %}
+                                                        <div class='valid-feedback'>¡Se ve bien!</div>
+                                                {% endif %}
+                                            </div>
+                                        {% endfor %}
+                                        <div>
+                                            <button type="submit" class="btn btn-success"><i class="bi bi-plus-circle"></i> Reparar</button>
+                                        </div>
+                                    {% endif %}
+                                </form>
+                            </div>
+                        </div>
+
+                    </div>
+               
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock body %}

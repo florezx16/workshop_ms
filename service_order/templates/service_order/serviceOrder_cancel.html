@@ -1,0 +1,47 @@
+{% extends 'base_adminv2.html' %}
+{% load utils %}
+{% block title %}Ordernes de servicio - Detalle Orden{% endblock title %}
+{% block body %}
+    <div class='row'>
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class='card-title'><strong>Cancelar order </strong>({{service_order.id}})</h3>
+                    <h6 class="card-subtitle mb-2 text-muted"> <strong>Modulo:</strong> Ordenes de servicio</h6>
+                        <a href='{% url "service_orders:grid" %}' class="btn btn-warning"><i class="bi bi-arrow-left"></i> Volver al listado</a>
+                    <hr>
+                        <div class="card card-body">
+                            <form method='post' enctype="multipart/form-data" novalidate>
+                                {% if form and service_order.flowStatus != 3 and service_order.flowStatus != 4 %}
+                                    {% csrf_token %}
+                                    {% for field in form %}
+                                        <div class='mb-3'>
+                                            <label for="{{field.id_for_label}}">{{field.label}}</label>
+                                            {{field|setValidationClass}}
+                                            {% if field.data == None %}
+                                                <div id="{{field.auto_id}}_helptext" class="form-text">
+                                                    {{field.help_text}}
+                                                </div>   
+                                            {% endif %}
+                                            {% if field.errors %}
+                                                {% for error in field.errors %}
+                                                    <div class="invalid-feedback">
+                                                        {{error}}
+                                                    </div>
+                                                {% endfor %}
+                                                {% else %}
+                                                    <div class='valid-feedback'>¡Se ve bien!</div>
+                                            {% endif %}
+                                        </div>
+                                    {% endfor %}
+                                    <div>
+                                        <button type="submit" class="btn btn-danger"><i class="bi bi-x-circle"></i> Cancelar</button>
+                                    </div>
+                                {% endif %}
+                            </form>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock body %}

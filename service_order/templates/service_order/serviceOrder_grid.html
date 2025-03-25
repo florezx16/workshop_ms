@@ -1,0 +1,119 @@
+{% extends 'base_adminv2.html' %}
+{% load utils %}
+{% block title %}Ordenes de servicio - Listado{% endblock title %}
+{% block body %}
+    <div class='row'>
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class='card-title'>Listado de Ordenes</h3>
+                    <h6 class="card-subtitle mb-2 text-muted"> <strong>Modulo:</strong> Ordenes de servicio</h6>
+                    <hr>
+                    {% include 'message.html' %}
+                    <div class="col-12">
+                        <p class="d-inline-flex gap-1">
+                            <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#filterBox" aria-expanded="false" aria-controls="filterBox" title="Filtrar"><i class="bi bi-funnel"></i></button>
+                            <a href='{% url "service_orders:create" %}' class="btn btn-success"><i class="bi bi-plus-circle" title="Add"></i> Nueva orden</a>
+                        </p>
+                        <div class="collapse" id="filterBox">
+                            <div class="card card-body">
+                                <form class="row g-1" novalidate method='get'>
+                                    <h4>Filtros disponibles</h4>
+                                    {% for field in ServiceOrderFilterForm %}
+                                        <div class='mb-3'>
+                                            {{field|setValidationClass}}
+                                        {% if field.errors %}
+                                            {% for error in field.errors %}
+                                                <div class="invalid-feedback">
+                                                    {{error}}
+                                                </div>
+                                            {% endfor %}
+                                        {% endif %}
+                                        </div>
+                                    {% endfor %}
+                                    <button type="submit" class="btn btn-primary"><i class="bi bi-search"></i> Filtrar</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead>
+                                <tr>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">Modelo</th>
+                                    <th scope="col">Serial</th>
+                                    <th scope="col">Cliente</th>
+                                    <th scope="col">Estado</th>
+                                    <th scope="col">Acciones</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    {% if service_orders|length > 0 %}
+                                        {% for row in service_orders %}
+                                            <tr>
+                                                <td scope="row"><a href="{% url 'service_orders:detail' row.id %}">{{row.id}}</a></td>
+                                                <td>{{row.model}}</td>
+                                                <td>{{row.serial}}</td>
+                                                <td>{{row.customer}}</td>
+                                                <td><span class="badge text-bg-{{row.flowStatus|flowStatus_mapping}}">{{row.get_flowStatus_display}}</span></td>
+                                                <td>
+                                                    {% if row.flowStatus == 1 %}
+                                                        <span><a href="{% url 'service_orders:flowUpdate' row.id %}" title='Diagnosticar'><i class="bi bi-card-checklist"></i></a></span>
+                                                        {% elif row.flowStatus == 2 %}
+                                                            <span><a href="{% url 'service_orders:flowUpdate' row.id %}" title='Reparar'><i class="bi bi-tools"></i></a></span>
+                                                        {% elif row.flowStatus == 3 %}
+                                                            <span><a href="{% url 'service_orders:consumptionPanel' row.id %}" title='Panel de consumibles'><i class="bi bi-box-seam"></i></a></span>
+                                                            <span><a href="{% url 'service_orders:report' row.id %}" target='_blank' title='Ver reporte'><i class="bi bi-clipboard-data"></i></a></span>
+                                                    {% endif %}
+                                                    {% if row.flowStatus != 4 and row.flowStatus != 3  %}
+                                                            <span><a href="{% url 'service_orders:cancel' row.id %}" title='Cancelar orden'><i class="bi bi-ban"></i></a></span>
+                                                    {% endif %}
+                                                    <span><a href="{% url 'service_orders:detail' row.id %}" title='Detalles/Historico'><i class="bi bi-eye"></i></i></a></span>
+                                                    <span><a href="{% url 'service_orders:delete' row.id %}" title='Eliminar'><i class="bi bi-trash"></i></a></span>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    {% else %}
+                                    <tr>
+                                        <td colspan='6' class='text-center'><span><strong>Ordenes de servicio no encontradas...</strong></span></td>
+                                    </tr>
+                                    {% endif %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-12">
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination justify-content-center">
+                                
+                                {% if page_obj.has_previous  %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{page_obj.previous_page_number}}" aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                {% endif %}
+
+                                <li class="page-item active"><a class="page-link" href="?page={{page_obj.number}}">{{page_obj.number}}</a></li>
+                                
+                                {% if page_obj.has_next %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{page_obj.next_page_number}}" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                {% endif %}
+
+                            </ul>
+                        </nav>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock body %}

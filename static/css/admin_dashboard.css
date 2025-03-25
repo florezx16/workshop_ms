@@ -1,0 +1,104 @@
+body {
+    background: #f2f2f2;
+    font-size: 16px;
+    font-family: 'Open Sans', sans-serif;
+}
+
+a {
+    text-decoration: none;
+}
+
+/* --- --- BARRA LATERAL --- --- */
+.barra-lateral {
+    background: #262a34;
+    color: #fff;
+    min-width: 300px;
+    min-height: 100vh;
+}
+
+.barra-lateral a {
+    color: #fff;
+}
+
+/* --- LOGO --- */
+.barra-lateral .logo {
+    background: #0275db;
+}
+
+.barra-lateral .logo h2 {
+    font-size: 30px;
+    font-family: 'Roboto', sans-serif;
+    text-align: center;
+    font-weight: 300;
+}
+
+/* --- MENU --- */
+.barra-lateral .menu a {
+    display: block;
+    padding: 20px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    border-bottom: 1px solid rgba(69, 69, 69);
+}
+
+.barra-lateral .menu .active {
+    background: lightskyblue;
+}
+
+.barra-lateral .menu a:hover {
+    background: lightskyblue;
+}
+
+.barra-lateral .menu a i {
+    margin-right: 10px;
+}
+
+/* --- --- MAIN --- --- */
+.main {
+    padding-top: 40px;
+}
+
+
+/* --- MEDIAQUERIES ---  */
+/* Dispositivo xs */
+@media screen and (max-width: 320px) {}
+
+/* Dispositivo sm */
+@media screen and (max-width: 576px) {
+    .barra-lateral {
+        min-height: auto;
+    }
+}
+
+/* Dispositivo md */
+@media screen and (max-width: 768px) {
+    .main .comentarios .comentario .botones button {
+        width: 100%;
+    }
+}
+
+/* Dispositivo lg */
+@media screen and (max-width: 992px) {}
+
+/* Dispositivo xl */
+@media screen and (max-width: 1200px) {
+    .barra-lateral {
+        min-width: auto;
+    }
+
+    .barra-lateral .logo {
+        display: none;
+    }
+
+    .barra-lateral .menu a svg {
+        display: none;
+    }
+
+    .main .comentarios .comentario .foto {
+        width: 30px;
+        height: 30px;
+    }
+}
+
+/* Dispositivo xxl */
+@media screen and (max-width: 1400px) {}

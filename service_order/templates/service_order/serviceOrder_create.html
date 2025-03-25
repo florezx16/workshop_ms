@@ -1,0 +1,88 @@
+{% extends 'base_adminv2.html' %}
+{% load utils %}
+{% load static %}
+{% block title %}Ordenes de servicio - Nuevo orden{% endblock title %}
+{% block body %}
+    <div class='row'>
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class='card-title'>Nueva orden de servicio</h3>
+                    <h6 class="card-subtitle mb-2 text-muted"> <strong>Modulo:</strong> Ordenes de servicio</h6>
+                    <a href='{% url "service_orders:grid" %}' class="btn btn-warning"><i class="bi bi-arrow-left"></i> Volver al listado</a>
+                    <hr>
+                    {% include 'message.html' %}
+                    <ul class="nav nav-tabs">
+                        <li class="nav-item" role="presentation">
+                            <button type="button" class="nav-link active" id="new_resource_btn" data-bs-toggle="tab" data-bs-target="#add_resource">1. Registro</button>
+                        </li>
+                        <li class="nav-item">
+                            <button type="button" class="nav-link disabled" id="diagnose_btn" data-bs-toggle="tab" data-bs-target="#diagnose_resource">2. Diagnóstico</button>
+                        </li>
+                        <li class="nav-item">
+                            <button type="button" class="nav-link disabled" id="fix_btn" data-bs-toggle="tab" data-bs-target="#fix_resource">3. Reparación</button>
+                        </li>
+                        <li class="nav-item">
+                            <button type="button" class="nav-link disabled" id="delivery_btn" data-bs-toggle="tab" data-bs-target="#delivery_resource">4. Entrega</button>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content">
+                        <div id="add_resource" class="tab-pane fade show active mt-3" role="tabpanel">
+                            <div class="card card-body">
+                                <div class='mb-3'>
+                                    <span>¿Deseas registrar un nuevo cliente? <a href='#' onclick='openPopup()' class='text-decoration-underline'> <strong>¡Hazlo desde aqui!</strong></a> </span>
+                                </div>
+
+                                <form method='post' novalidate>
+                                    {% if form %}
+                                        {% csrf_token %}
+                                        {% for field in form %}
+                                            <div class='mb-3'>
+                                                <label for="{{field.id_for_label}}">{{field.label}}</label>
+                                                {{field|setValidationClass}}
+                                                {% if field.data == None %}
+                                                    <div id="{{field.auto_id}}_helptext" class="form-text">
+                                                        {{field.help_text}}
+                                                    </div>   
+                                                {% endif %}
+                                                {% if field.errors %}
+                                                    {% for error in field.errors %}
+                                                        <div class="invalid-feedback">
+                                                            {{error}}
+                                                        </div>
+                                                    {% endfor %}
+                                                    {% else %}
+                                                        <div class='valid-feedback'>¡Se ve bien!</div>
+                                                {% endif %}
+                                            </div>
+                                        {% endfor %}
+                                    {% endif %}
+                                    <div>
+                                        <button type="submit" class="btn btn-success"><i class="bi bi-plus-circle"></i> Registrar</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div id="diagnose_resource" class="tab-pane fade  mt-3">
+                            <h3>Unavailable</h3>
+                        </div>
+
+                        <div id="fix_resource" class="tab-pane fade  mt-3">
+                            <h3>Unavailable</h3>
+                        </div>
+
+                        <div id="delivery_resource" class="tab-pane fade  mt-3">
+                            <h3>Unavailable</h3>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock body %}
+{% block scripts %}
+<script src="{% static 'js/signalFromPopup.js' %}"></script>
+{% endblock scripts %}

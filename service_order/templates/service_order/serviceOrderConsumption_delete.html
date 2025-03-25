@@ -1,0 +1,31 @@
+{% extends 'base_adminv2.html' %}
+{% load utils %}
+{% block title %}Gestión de consumos - Eliminación{% endblock title %}
+{% block body %}
+    <div class='row'>
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class='card-title'><strong>Eliminación de consumos(Orden #{{serviceOrder_consumption.service_order}}) - {{serviceOrder_consumption.inventory_code}}</strong></h3>
+                    <h6 class="card-subtitle mb-2 text-muted"> <strong>Modulo:</strong> Inventario</h6>
+                        <a href='{% url "service_orders:consumptionPanel" serviceOrder_consumption.service_order.id %}' class="btn btn-warning"><i class="bi bi-arrow-left"></i> Volver al listado</a>
+                    <hr>
+                    <div class="alert alert-warning" role="alert">
+                        <h4 class="alert-heading"> <i class="bi bi-exclamation-triangle"></i> <strong>¡Alto ahí!</strong>  </h4>
+                        <p>Estas a punto de eliminar el consumo <strong>{{serviceOrder_consumption.inventory_code}}</strong> de la orden <strong>#{{serviceOrder_consumption.service_order}}</strong>. Esto afectara positivamente tus existencias actuales sumandole la cantidad de <strong>{{serviceOrder_consumption.quantity}}</strong>.</p>
+                        <p>Una vez realizada esta acción, esta sera irreversible.</p>
+                        <hr>
+                        <p class="mb-0">¿Estas seguro de que deseas continuar?</p>
+                        <div class='mt-2'>
+                            <form method='post'>
+                                {% csrf_token %}
+                                <button class='btn btn-danger' type='submit'> <i class="bi bi-trash"></i> Si, eliminar</button>
+                            </form>
+                        </div>
+                    </div>
+                   
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock body %}
