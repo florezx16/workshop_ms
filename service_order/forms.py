@@ -339,3 +339,42 @@ class ServiceOrderConsumption_MainForm(forms.ModelForm):
             available_quantity = Inventory.objects.get(id=inventory_code.id).available_quantity
             raise ValidationError(f'La cantidad a consumir supera la disponibilidad actual de tus existencias({available_quantity}).')
         return quantity2consume
+    
+class serviceOrders_ServiceConfigForm(forms.ModelForm):
+    services_total = forms.FloatField(
+        label='Total del servicio', 
+        required=True,
+        min_value=1000,
+        max_value=1000000000,
+        widget=forms.NumberInput(attrs={
+            'class':'form-control'
+        }),
+        validators=[
+            MinValueValidator(0),
+            MaxValueValidator(1000000000),
+            RegexValidator(regex='^[0-9 .]+$',message='Esta campo contiene caracteres invalidos.')
+        ]
+    )
+    
+    services_description = forms.CharField(
+        label='Observaciones del servicio', 
+        max_length=500, 
+        required=True, 
+        help_text='Breve descripción de los servicios dados en la orden.',
+        widget=forms.Textarea(
+            attrs={
+                'class':'form-control',
+                'rows':'3',
+                'style':'max-width:500px;'
+            }
+        ),
+        validators=[
+            MinLengthValidator(5),
+            MaxLengthValidator(500),
+            RegexValidator(regex='^[a-zA-Z0-9 ,.\n\r]+$',message='Este campo contiene caracteres invalidos.'),
+        ]
+    )
+        
+    class Meta():
+        model = ServiceOrder
+        fields = ['services_total','services_description']

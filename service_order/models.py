@@ -28,10 +28,13 @@ class ServiceOrder(models.Model):
     repair_comments = models.TextField(verbose_name='Observaciones de reparación', blank=False, null=True)
     cancel_date = models.DateTimeField(verbose_name='Fecha de cancelación', blank=False, null=True)
     cancel_comments = models.TextField(verbose_name='Motivo de cancelación', blank=False, null=True)
+    consumables_total = models.FloatField(verbose_name='Total de consumibles', default=0)
     status = models.IntegerField(verbose_name='Estado',choices=ServiceOrder_status.choices, default=ServiceOrder_status.enable)
+    services_total = models.FloatField(verbose_name='Total del servicio', default=0)
+    services_description = models.TextField(verbose_name='Observaciones del servicio', blank=False, null=True)
     createtime = models.DateTimeField(verbose_name='Fecha de creación', auto_now_add=True)
     updatetime = models.DateTimeField(verbose_name='Fecha de ultima actualización', auto_now=True)
-    
+        
     class Meta():
         verbose_name = "Order"
         verbose_name_plural = "Orders"

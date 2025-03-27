@@ -60,18 +60,19 @@
                                                 <td>{{row.customer}}</td>
                                                 <td><span class="badge text-bg-{{row.flowStatus|flowStatus_mapping}}">{{row.get_flowStatus_display}}</span></td>
                                                 <td>
-                                                    {% if row.flowStatus == 1 %}
+                                                    {% if row.flowStatus == 1 %}{% comment %} Diagnose {% endcomment %}
                                                         <span><a href="{% url 'service_orders:flowUpdate' row.id %}" title='Diagnosticar'><i class="bi bi-card-checklist"></i></a></span>
-                                                        {% elif row.flowStatus == 2 %}
+                                                        {% elif row.flowStatus == 2 %}{% comment %} Repair {% endcomment %}
                                                             <span><a href="{% url 'service_orders:flowUpdate' row.id %}" title='Reparar'><i class="bi bi-tools"></i></a></span>
-                                                        {% elif row.flowStatus == 3 %}
+                                                        {% elif row.flowStatus == 3 %}{% comment %} Complete {% endcomment %}
+                                                            <span><a href="{% url 'service_orders:servicesConfig' row.id %}" title='Configurar costos de servicio'><i class="bi bi-coin"></i></a></span>
                                                             <span><a href="{% url 'service_orders:consumptionPanel' row.id %}" title='Panel de consumibles'><i class="bi bi-box-seam"></i></a></span>
-                                                            <span><a href="{% url 'service_orders:report' row.id %}" target='_blank' title='Ver reporte'><i class="bi bi-clipboard-data"></i></a></span>
+                                                            <span><a href="{% url 'service_orders:report' row.id %}" target='_blank' title='Visualizar reporte de orden'><i class="bi bi-clipboard-data"></i></a></span>
                                                     {% endif %}
                                                     {% if row.flowStatus != 4 and row.flowStatus != 3  %}
                                                             <span><a href="{% url 'service_orders:cancel' row.id %}" title='Cancelar orden'><i class="bi bi-ban"></i></a></span>
                                                     {% endif %}
-                                                    <span><a href="{% url 'service_orders:detail' row.id %}" title='Detalles/Historico'><i class="bi bi-eye"></i></i></a></span>
+                                                    <span><a href="{% url 'service_orders:detail' row.id %}" title='Detalles de la orden'><i class="bi bi-eye"></i></i></a></span>
                                                     <span><a href="{% url 'service_orders:delete' row.id %}" title='Eliminar'><i class="bi bi-trash"></i></a></span>
                                                 </td>
                                             </tr>
