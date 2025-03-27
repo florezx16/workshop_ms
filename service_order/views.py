@@ -275,7 +275,26 @@ class ServiceOrderConsumtion_delete(DeleteView):
         serviceOrder = self.get_object()
         return reverse_lazy('service_orders:consumptionPanel',args=[serviceOrder.service_order.id])
     
-
-def testing(request):
-    pass
+class ServiceOrder_serviceConfig(UpdateView):
+    model = ServiceOrder
+    template_name = "service_order/serviceOrder_servicesConfig.html"
+    context_object_name = 'service_order'
+    success_url = reverse_lazy('service_orders:grid')
+    form_class = serviceOrders_ServiceConfigForm
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['active_link'] = 'service_orders'
+        return context
+    
+    def form_valid(self, form):
+        messages.success(request=self.request,message='Has actualizado los costos de servicio de manera exitosa.')
+        return super().form_valid(form)
+    
+    def form_invalid(self, form):
+        messages.error(request=self.request,message='El formulario presenta algunos errores, por favor verificarlos e intentarlo nuevamente.')
+        return super().form_invalid(form)
+    
+    
+    
     

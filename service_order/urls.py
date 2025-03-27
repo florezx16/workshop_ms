@@ -13,4 +13,5 @@ urlpatterns = [
     path(route='consumptionPanel/<int:serviceOrder_id>',view=views.ServiceOrderConsumption_ListView.as_view(),name='consumptionPanel'),
     path(route='AddConsumption/<int:serviceOrder_id>',view=views.ServiceOrderConsumption_CreateView.as_view(),name='AddConsumption'),
     path(route='DeleteConsumption/<int:pk>',view=views.ServiceOrderConsumtion_delete.as_view(),name='DeleteConsumption'),
+    path(route='servicesConfig/<int:pk>',view=views.ServiceOrder_serviceConfig.as_view(),name='servicesConfig'),
 ]
