@@ -1,5 +1,6 @@
 {% extends 'base_adminv2.html' %}
 {% load utils %}
+ {% load humanize %}
 {% block title %}Ordenes de servicio - Listado{% endblock title %}
 {% block body %}
     <div class='row'>
@@ -72,7 +73,7 @@
                         </div>
                     </div>
                     <div class='col-12'>
-                        <h3>Total consumido: <span>10.000$</span></h3>
+                        <span class='fs-2'>Total consumido: </span><span class='fs-1 fw-semibold'>{{ServiceOrder.consumables_total|intcomma}}$</span>
                     </div>
                     <div class="col-12">
                         <nav aria-label="Page navigation example">

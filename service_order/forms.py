@@ -269,7 +269,7 @@ class serviceOrders_CancelForm(forms.ModelForm):
         fields = ['cancel_comments']
     
 class ServiceOrderConsumptionFilterForm(forms.Form):
-    customer = forms.ModelChoiceField(
+    inventory_code = forms.ModelChoiceField(
         label='Codigo de inventario',
         required=False,
         queryset=Inventory.objects.filter(status=1),
@@ -281,7 +281,7 @@ class ServiceOrderConsumptionFilterForm(forms.Form):
             }
         ),
         validators=[
-            RegexValidator(regex='^[0-9]+$',message='Esta campo contiene caracteres invalidos')
+            RegexValidator(regex='^[a-zA-Z0-9 -()]+$',message='Esta campo contiene caracteres invalidos')
         ]
     )
     

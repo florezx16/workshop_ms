@@ -196,11 +196,10 @@ class serviceOrder_Cancel(UpdateView):
     
 #CONSUMPTION VIEWS
 class ServiceOrderConsumption_ListView(ListView):
-    Model = ServiceOrderConsumption
+    model = ServiceOrderConsumption
     template_name = 'service_order/serviceOrderConsumption_grid.html'
     context_object_name = 'serviceOrders_consumptions'
     paginate_by = 10
-    ordering = ["-createtime"]
     extra_context = {
         'ServiceOrderConsumptionFilterForm':ServiceOrderConsumptionFilterForm
     }
@@ -214,13 +213,13 @@ class ServiceOrderConsumption_ListView(ListView):
                     'inventory_code':'exact'
                 }
                 query_filters = PrepareFilters(filter_form.cleaned_data,filters_dict)
-                queryset = ServiceOrderConsumption.objects.filter(query_filters,Q(service_order=self.kwargs.get('serviceOrder_id')))
+                queryset = ServiceOrderConsumption.objects.filter(query_filters,Q(service_order=self.kwargs.get('serviceOrder_id'))).order_by('-createtime')
                 return queryset
             else:
                 messages.error(request=self.request,message='Tus filtros presentan algunas inconsistencias, por favor revisalos e intentalo nuevamente.')
         
         #No GET request
-        queryset = ServiceOrderConsumption.objects.filter(status=1,service_order=self.kwargs.get('serviceOrder_id'))
+        queryset = ServiceOrderConsumption.objects.filter(status=1,service_order=self.kwargs.get('serviceOrder_id')).order_by('-createtime')
         return queryset
     
     def get_context_data(self, **kwargs):
