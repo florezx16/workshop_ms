@@ -1,5 +1,6 @@
 from django.db.models import Q
 from inventory.models import Inventory,InventoryMovement
+from service_order.models import ServiceOrder
 
 def PrepareFilters(data,filters_dict):
     query_filters = Q()
@@ -17,8 +18,8 @@ def PrepareFilters(data,filters_dict):
 
 def createMovementRecord(instance,movementType,movementDescription):
     print('Adding InventoryMovement record')
-    print(f'Type: {movementType}')
-    print(f'Description: {movementDescription}')
+    print(f'\tType: {movementType}')
+    print(f'\tDescription: {movementDescription}')
     try:
         inventoryInstance = Inventory.objects.get(id=instance.inventory_code_id)
         
@@ -33,4 +34,25 @@ def createMovementRecord(instance,movementType,movementDescription):
         print('ERROR: Inventory instance not found.')
     except Exception as e:
         print(f'ERROR({type(e).__name__}):{e}')
+        
+def modifyConsumablesTotal(serviceConsume_obj,acumType):
+    print('Update consumables_total')
+    try:
+        serviceOrder = ServiceOrder.objects.get(id=serviceConsume_obj.service_order_id)
+    except ServiceOrder.DoesNotExist:
+        print('\tService order instance not found.')
+    except Exception as e:
+        print(f'ERROR({type(e).__name__}):{e}')
+    else:
+        print(f'\tacumType:{acumType}')
+        print(f'\tServiceOrder instance(ID):{serviceOrder}')
+        print(f'\tOld consumables_total:{serviceOrder.consumables_total}')
+        print(f'\tPrice2{acumType}:{serviceConsume_obj.total}')
+        if acumType=='add':
+            serviceOrder.consumables_total += serviceConsume_obj.total
+        else:
+            serviceOrder.consumables_total -= serviceConsume_obj.total
+        print(f'\tNew consumables_total:{serviceOrder.consumables_total}')
+        print('\tSaving ServiceOrder changes...')
+        serviceOrder.save()
         
