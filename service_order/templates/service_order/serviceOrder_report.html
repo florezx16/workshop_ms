@@ -30,14 +30,14 @@
             <div class="col-12 mt-3">
                 <table class='table table-bordered'>
                     <tr>
-                        <th rowspan='2' class='text-center'>IMAGEN</th>
-                        <td><strong>NIT:</strong> <span>56554457</span></td>
-                        <td><strong>Dirección:</strong> <span>CL 76 #554 Av Fantasy</span></td>
-                        <td><strong>Teléfono:</strong> <span>+57 3005564576</span></td>
+                        <th rowspan='2' class='text-center'><img class='img-fluid' src="{{coreInfo.company_logo.url}}" alt=""></th>
+                        <td><strong>NIT:</strong> <span>{{coreInfo.company_id}}</span></td>
+                        <td><strong>Dirección:</strong> <span>{{coreInfo.company_address}}</span></td>
+                        <td><strong>Teléfono:</strong> <span>{{coreInfo.company_contact_phone}}</span></td>
                     </tr>
                     <tr>
-                        <td colspan='2'><strong>Ubicación:</strong> <span>Medellin - Colombia</span></td>
-                        <td colspan='2'><strong>Correo electrónico:</strong> <span>tecnico@plotparts.com</span></td>
+                        <td colspan='2'><strong>Ubicación:</strong> <span>{{coreInfo.company_location}}</span></td>
+                        <td colspan='2'><strong>Correo electrónico:</strong> <span>{{coreInfo.company_email}}</span></td>
                     </tr>
                 </table>
             </div>

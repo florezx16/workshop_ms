@@ -9,6 +9,7 @@ from .forms import *
 from core.utils import PrepareFilters
 from .utils import SetNextFlowStatus
 from assets.models import Asset
+from core.models import CoreInformation
 
 # Create your views here.
 class ServiceOrder_ListView(ListView):
@@ -171,6 +172,7 @@ class ServiceOrder_ReportView(DetailView):
         serviceOrder = self.get_object()
         
         #Company core information
+        core_info = CoreInformation.objects.get(id=1)
         
         #Customer instance
         customer = Asset.objects.get(id=serviceOrder.customer_id)
@@ -180,6 +182,7 @@ class ServiceOrder_ReportView(DetailView):
         
         context = super().get_context_data(**kwargs)
         context['active_link'] = 'service_orders'
+        context['coreInfo'] = core_info
         context['serviceOrder'] = serviceOrder
         context['customer'] = customer
         context['consumblesResults'] = consumblesResults
