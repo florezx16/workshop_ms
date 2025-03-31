@@ -8,6 +8,7 @@ from .models import ServiceOrder, ServiceOrderImages, ServiceOrderConsumption
 from .forms import *
 from core.utils import PrepareFilters
 from .utils import SetNextFlowStatus
+from assets.models import Asset
 
 # Create your views here.
 class ServiceOrder_ListView(ListView):
@@ -162,12 +163,27 @@ class ServiceOrder_UpdateView(UpdateView):
 class ServiceOrder_ReportView(DetailView):
     model = ServiceOrder
     template_name = 'service_order/serviceOrder_report.html'
-    context_object_name = 'serviceOrder '
+    context_object_name = 'serviceOrder'
+    
     
     def get_context_data(self, **kwargs):
+        #ServiceOrder instance
+        serviceOrder = self.get_object()
+        
+        #Company core information
+        
+        #Customer instance
+        customer = Asset.objects.get(id=serviceOrder.customer_id)
+        
+        #Consumption results
+        consumblesResults = ServiceOrderConsumption.objects.filter(service_order=serviceOrder.id).order_by('-createtime')
+        
         context = super().get_context_data(**kwargs)
         context['active_link'] = 'service_orders'
-        context['serviceOrder'] = self.object
+        context['serviceOrder'] = serviceOrder
+        context['customer'] = customer
+        context['consumblesResults'] = consumblesResults
+        context['serviceOrder_Total'] = serviceOrder.services_total + serviceOrder.consumables_total
         return context
     
 class serviceOrder_Cancel(UpdateView):
