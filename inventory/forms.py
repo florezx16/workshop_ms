@@ -1,8 +1,14 @@
 from django import forms
 from .models import Inventory, InventoryCodes, InventoryMovement, MovementsTypes
 from assets.models import Asset
-from django.core.validators import MaxLengthValidator,MinLengthValidator,RegexValidator,ProhibitNullCharactersValidator,MaxValueValidator,MinValueValidator
+from django.core.validators import MaxLengthValidator,MinLengthValidator,RegexValidator,ProhibitNullCharactersValidator,MaxValueValidator,MinValueValidator,FileExtensionValidator
 from django.core.exceptions import ValidationError
+
+def imagesTotalSize_validator(image):
+    imageSize = round(image.size/1024,2)
+    if imageSize > 400:
+        raise ValidationError('La imagen adjunta supera el limite de peso permitido(400KB) por favor verificar.')
+    return image
 
 class InventoryCodeMainForm(forms.ModelForm):
     code = forms.CharField(
@@ -92,6 +98,21 @@ class InventoryCodeMainForm(forms.ModelForm):
         ]
     )
     
+    related_image = forms.ImageField(
+        label='Imagen de referencia', 
+        required=True,
+        help_text='Imagen de referencia para tus productos.',
+        widget=forms.FileInput(
+            attrs={
+                'class':'form-control'
+            }
+        ),
+        validators=[
+            FileExtensionValidator(allowed_extensions=['jpeg','jpg','png'],message='Invalid file extension, valid file extensions are .jpeg .jpg .pgn'),
+            imagesTotalSize_validator
+        ]
+    )
+    
     extra_info = forms.CharField(
         label='Información adicional', 
         max_length=300, 
@@ -113,7 +134,7 @@ class InventoryCodeMainForm(forms.ModelForm):
     
     class Meta:
         model = InventoryCodes
-        fields = ['code','name','type','supplier','inbound_price','outbound_price','extra_info']
+        fields = ['code','name','type','supplier','inbound_price','outbound_price','related_image','extra_info']
     
     def clean_code(self):
         code = self.cleaned_data.get('code')

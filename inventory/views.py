@@ -78,6 +78,12 @@ class InventoryCodesUpdateView(UpdateView):
     
     def form_valid(self, form):
         messages.success(request=self.request,message='El código se ha modificado de manera exitosa.')
+        code = self.get_object() #Get the current object
+        files = self.request.FILES #Get file from the request
+        related_image = files.get('related_image') #Get new image from request
+        if related_image:#If new image was send,delete the old one
+            image = code.related_image #Access to old image
+            image.delete() #Delete old image
         return super().form_valid(form)
     
     def form_invalid(self, form):

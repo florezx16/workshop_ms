@@ -13,7 +13,7 @@ class InventoryAdmin(admin.ModelAdmin):
         return False
 
 class InventoryCodesAdmin(admin.ModelAdmin):
-    list_display = ['id','code','name','type','supplier','status']
+    list_display = ['id','code','name','type','supplier','related_image','status']
     readonly_fields = ['createtime','updatetime']
     list_filter = ['status','type','supplier']
     ordering = ['code']
