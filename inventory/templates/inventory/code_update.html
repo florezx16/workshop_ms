@@ -11,13 +11,24 @@
                         <a href='{% url "inventory:grid_code" %}' class="btn btn-warning"><i class="bi bi-arrow-left"></i> Volver al listado</a>
                     <hr>
                     {% include 'message.html' %}
-                    <form method='post' novalidate>
+                    <form method='post' enctype="multipart/form-data" novalidate>
                         {% csrf_token %}
                         {% for field in form %}
                             <div class='mb-3'>
                                 <label for="{{field.id_for_label}}">{{field.label}}</label>
                                 {{field|setValidationClass}}
-                                {% if field.data == None %}
+                                {% if field.auto_id == 'id_related_image' %}
+                                    <div>
+                                        <span class='form-text'>Imagen cargada actualmente: <strong>{{code.related_image.name}}</strong></span>
+                                        <div>
+                                            <span class='form-text'><strong>Previsualización :</strong></span>
+                                            <div>
+                                                <img class='img-thumbnail mt-2' src="{{code.related_image.url}}" alt="reference image" width="150" height="100">
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                                {% if field.value == None %}
                                     <div id="{{field.auto_id}}_helptext" class="form-text">
                                         {{field.help_text}}
                                     </div>   
