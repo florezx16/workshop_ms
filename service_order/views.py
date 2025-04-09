@@ -51,7 +51,7 @@ class ServiceOrder_CreateView(CreateView):
     model = ServiceOrder
     template_name = 'service_order/serviceOrder_create.html'
     form_class = serviceOrders_MainForm
-    success_url = reverse_lazy('service_orders:list')
+    success_url = reverse_lazy('service_orders:grid')
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

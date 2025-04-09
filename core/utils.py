@@ -1,6 +1,10 @@
 from django.db.models import Q
+from django.utils.timezone import make_aware
 from inventory.models import Inventory,InventoryMovement
 from service_order.models import ServiceOrder
+
+from datetime import datetime, timedelta
+from dateutil.relativedelta import relativedelta
 
 def PrepareFilters(data,filters_dict):
     query_filters = Q()
@@ -56,3 +60,82 @@ def modifyConsumablesTotal(serviceConsume_obj,acumType):
         print('\tSaving ServiceOrder changes...')
         serviceOrder.save()
         
+def generateDates(currentDate):
+    months2reduce = 3 #Months for calculate the differents dates
+    datesVault = []
+    for i in range(months2reduce):
+        dateObject = currentDate - relativedelta(months=i)
+        startDate = dateObject + relativedelta(day=1)
+        endDate = dateObject + relativedelta(day=31)
+        month_name = dateObject.strftime("%B")
+        dataDict = {
+            'month_name':month_name,
+            'dates':{
+                'start_date':startDate,
+                'end_date':endDate,
+            }
+        }
+        datesVault.append(dataDict)
+    return datesVault
+    
+def pieChart_widgetData():
+    #Current time with time zone
+    current_time = make_aware(datetime.now())
+    
+    #3months before - current_data 
+    query_time = current_time - timedelta(days=90)
+    
+    #Execute query
+    query = ServiceOrder.objects.filter(status=1,flowStatus__in=[1,2],createtime__range=(query_time,current_time))
+    
+    pending2diagnose = 0
+    pending2repair = 0
+    
+    #Loop query result
+    for serviceOrder in query:
+        match serviceOrder.flowStatus:
+            case 1:
+                pending2diagnose+=1
+            case 2:
+                pending2repair+=1
+    
+    #Return as list
+    return [pending2diagnose,pending2repair]
+
+
+def barChart_widgetData():
+    #Current time with time zone
+    current_time = datetime.now()
+    
+    #Get dates to query the date
+    datesVault = generateDates(current_time)
+    
+    #Query serviceOrders information according to the dates generated
+    months = {}
+    totalCompleted = []
+    totalCanceled = []
+    acum = 1
+    for date in datesVault:
+        datesValues = date.get('dates')
+        count_result = []
+        for i in [3,4]:#FlowStatus loop
+            startDate = make_aware(datesValues.get('start_date'))
+            endDate = make_aware(datesValues.get('end_date'))
+            queryCount = ServiceOrder.objects.filter(status=1,flowStatus=i,createtime__range=(startDate,endDate)).count()
+            count_result.append(queryCount)
+        months[f'month{acum}'] = date.get('month_name')
+        totalCompleted.append(count_result[0])
+        totalCanceled.append(count_result[1])
+        acum+=1
+
+    return {
+        'monthsInfo':months,
+        'totalCompleted':totalCompleted,
+        'totalCanceled':totalCanceled
+    }
+
+def getLastInventoryMovements():
+    query = InventoryMovement.objects.filter(status=1)[:5]
+    return query
+
+    
