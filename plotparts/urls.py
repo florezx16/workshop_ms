@@ -16,7 +16,6 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from core.urls import core_urlpatterns
 
 #Serve media files
 from django.conf import settings
@@ -24,7 +23,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path(route='',view=include(core_urlpatterns)),
+    path(route='',view=include('core.urls')),
     path(route='assets/',view=include('assets.urls')),
     path(route='inventory/',view=include('inventory.urls')),
     path(route='service_orders/',view=include('service_order.urls')),

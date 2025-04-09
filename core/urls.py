@@ -1,6 +1,7 @@
 from django.urls import path
-from . import views
+from .views import index_TemplateView
 
-core_urlpatterns = ([
-    path(route='',view=views.index,name='index')
-],'core')
+app_name = 'core'
+urlpatterns = [
+    path(route='',view=index_TemplateView.as_view(),name='index')
+]

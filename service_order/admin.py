@@ -3,7 +3,7 @@ from .models import ServiceOrder, ServiceOrderImages, ServiceOrderConsumption
 
 # Register your models here.
 class ServiceOrderAdmin(admin.ModelAdmin):
-    list_display = ['id','serial','model','customer','flowStatus','status']
+    list_display = ['id','serial','model','customer','flowStatus','createtime','status']
     readonly_fields = ['createtime','updatetime','diagnose_date','repair_date','cancel_date']
     list_filter = ['status','flowStatus']
     ordering = ['id']

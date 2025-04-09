@@ -3,7 +3,7 @@ from . import views
 
 app_name = 'service_orders'
 urlpatterns = [
-    path(route='list/',view=views.ServiceOrder_ListView.as_view(),name='grid'),
+    path(route='grid/',view=views.ServiceOrder_ListView.as_view(),name='grid'),
     path(route='create/',view=views.ServiceOrder_CreateView.as_view(),name='create'),
     path(route='detail/<int:pk>',view=views.ServiceOrder_DetailView.as_view(),name='detail'),
     path(route='delete/<int:serviceOrder_id>',view=views.ServiceOrder_DeleteView.as_view(),name='delete'),
