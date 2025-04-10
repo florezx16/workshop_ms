@@ -1,5 +1,5 @@
 from django import forms
-from .models import Inventory, InventoryCodes, InventoryMovement, MovementsTypes
+from .models import Inventory, InventoryCodes, InventoryMovement, MovementsTypes, InventoryCategory
 from assets.models import Asset
 from django.core.validators import MaxLengthValidator,MinLengthValidator,RegexValidator,ProhibitNullCharactersValidator,MaxValueValidator,MinValueValidator,FileExtensionValidator
 from django.core.exceptions import ValidationError
@@ -44,18 +44,14 @@ class InventoryCodeMainForm(forms.ModelForm):
         ]
     )
     
-    type = forms.ChoiceField(
-        label='Tipo',
-        choices=InventoryCodes.IntentoryType.choices,
+    category = forms.ModelChoiceField(
+        label='Categoría',
         required=True,
-        widget = forms.Select(
-            attrs={
-                'class':'form-control'
-            }
-        ),
-         validators=[
-            RegexValidator(regex='^[0-9]+$',message='Esta campo contiene caracteres invalidos.')
-        ]
+        queryset=InventoryCategory.objects.filter(status=1),
+        empty_label='-- Selecciona --',
+        widget=forms.Select(attrs={
+            'class':'form-control'
+        })
     )
       
     supplier = forms.ModelChoiceField(
@@ -134,7 +130,7 @@ class InventoryCodeMainForm(forms.ModelForm):
     
     class Meta:
         model = InventoryCodes
-        fields = ['code','name','type','supplier','inbound_price','outbound_price','related_image','extra_info']
+        fields = ['code','name','category','supplier','inbound_price','outbound_price','related_image','extra_info']
     
     def clean_code(self):
         code = self.cleaned_data.get('code')
@@ -177,7 +173,7 @@ class InventoryCodeFilterForm(forms.Form):
     supplier = forms.ModelChoiceField(
         help_text='filter_option',
         required=False,
-        queryset=Asset.objects.filter(status=1),
+        queryset=Asset.objects.filter(status=1,type=2),
         empty_label='-- Proovedor --',
         widget=forms.Select(attrs={
             'class':'form-control',

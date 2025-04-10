@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Inventory, InventoryCodes, InventoryMovement
+from .models import Inventory, InventoryCodes, InventoryMovement, InventoryCategory
 
 # Register your models here.
 class InventoryAdmin(admin.ModelAdmin):
@@ -13,11 +13,11 @@ class InventoryAdmin(admin.ModelAdmin):
         return False
 
 class InventoryCodesAdmin(admin.ModelAdmin):
-    list_display = ['id','code','name','type','supplier','related_image','status']
+    list_display = ['id','code','name','category','supplier','related_image','status']
     readonly_fields = ['createtime','updatetime']
-    list_filter = ['status','type','supplier']
+    list_filter = ['status','supplier']
     ordering = ['code']
-    search_fields = ['code','name']
+    search_fields = ['code','name','category']
     
 class InventoryMovementAdmin(admin.ModelAdmin):
     list_display = ['id','inventory_code','type','quantity','status','is_inbound','createtime']
@@ -29,8 +29,17 @@ class InventoryMovementAdmin(admin.ModelAdmin):
     def has_add_permission(self, request):
         return False
     
+class InventoryCategoryAdmin(admin.ModelAdmin):
+    list_display = ['id','name','status','createtime','updatetime']
+    readonly_fields = ['createtime','updatetime']
+    list_filter = ['status']
+    ordering = ['id','-createtime','name']
+    search_fields = ['name']
+    
 admin.site.register(InventoryCodes, InventoryCodesAdmin)
 admin.site.register(Inventory, InventoryAdmin)
 admin.site.register(InventoryMovement, InventoryMovementAdmin)
+admin.site.register(InventoryCategory, InventoryCategoryAdmin)
+
 
 
