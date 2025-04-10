@@ -13,17 +13,26 @@ class MovementsTypes(models.IntegerChoices):
     type_in = (1,'In')
     type_out = (2,'Out')
     __empty__ = ('-- Tipo de movimiento --')
-
-class InventoryCodes(models.Model):
-    class IntentoryType(models.IntegerChoices):
-        spare_part = (1,'Repuesto')
-        ink = (2,'Tinta')
-        other = (3,'Otro')
-        __empty__ = ('-- Tipo --')
     
+class InventoryCategory(models.Model):
+    name = models.CharField(verbose_name='Nombre', max_length=50)
+    additional_info = models.TextField(verbose_name='Información adicional')
+    status = models.IntegerField(verbose_name='Estado',choices=Status.choices, default=Status.enable)
+    createtime = models.DateTimeField(verbose_name='Fecha/hora de creación', auto_now_add=True) 
+    updatetime = models.DateTimeField(verbose_name='Fecha/hora de modificación', auto_now=True)
+    
+    class Meta:
+        verbose_name = 'Categoria de códigos'
+        verbose_name_plural = "Categoria de códigos"
+        ordering = ['id','-createtime','name']
+    
+    def __str__(self):
+        return self.name
+
+class InventoryCodes(models.Model):    
     code = models.CharField(verbose_name='Código', max_length=50, unique=True)
     name = models.CharField(verbose_name='Nombre', max_length=100)
-    type = models.IntegerField(verbose_name='Tipo', choices=IntentoryType)
+    category = models.ForeignKey(to=InventoryCategory, verbose_name='Categoría', on_delete = models.PROTECT, default=2)
     supplier = models.ForeignKey(to=Asset, verbose_name='Proovedor', on_delete = models.PROTECT)
     inbound_price = models.FloatField(verbose_name='Precio venta', default=0)
     outbound_price = models.FloatField(verbose_name='Precio compra', default=0)
@@ -34,8 +43,8 @@ class InventoryCodes(models.Model):
     updatetime = models.DateTimeField(verbose_name='Fecha/hora de modificación', auto_now=True)
     
     class Meta:
-        verbose_name = "Code"
-        verbose_name_plural = "Codes"
+        verbose_name = "Códigos de inventario"
+        verbose_name_plural = "Códigos de inventario"
         ordering = ['code']
 
     def __str__(self):
@@ -50,8 +59,8 @@ class Inventory(models.Model):
     updatetime = models.DateTimeField(verbose_name='Fecha/hora de modificación', auto_now=True)
 
     class Meta:
-        verbose_name = "Current stock" 
-        verbose_name_plural = "Current stocks"
+        verbose_name = "Existencias actuales" 
+        verbose_name_plural = "Existencias actuales"
         ordering = ['code']
 
     def __str__(self):
@@ -67,10 +76,12 @@ class InventoryMovement(models.Model):
     is_inbound = models.BooleanField(verbose_name='Inbound flag', default=False)
     
     class Meta:
-        verbose_name = "Movement"
-        verbose_name_plural = "Movements"
+        verbose_name = "Movimientos de existencias"
+        verbose_name_plural = "Movimientos de existencias"
         ordering = ['-id','-createtime']
 
     def __str__(self):
         return str(self.id)
+    
+
 
