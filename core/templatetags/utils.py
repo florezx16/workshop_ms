@@ -53,3 +53,14 @@ def inventoryMovement_TypeMapping(flowStatus):
         case 2:#Out
             css_class = 'danger'
     return css_class
+
+@register.simple_tag(takes_context=True)
+def querystring_without_page(context):
+    request = context['request']
+    querydict = request.GET.copy()
+    querydict.pop('page',None)
+    
+    #Delete keys empty or duplicated
+    clean_querydict = {k: v for k, v in querydict.items() if v.strip() != ''}
+    
+    return '&'.join([f'{k}={v}' for k,v in clean_querydict.items()])
