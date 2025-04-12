@@ -124,7 +124,7 @@ class ServiceOrderFilterForm(forms.Form):
             }
         ),
         validators=[
-            RegexValidator(regex='^[0-9]+$',message='Esta campo contiene caracteres invalidos')
+            RegexValidator(regex='^[a-zA-Z0-9 -]+$',message='Esta campo contiene caracteres invalidos')
         ]
     )
     

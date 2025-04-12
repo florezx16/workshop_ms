@@ -55,7 +55,7 @@ class InventoryCodeMainForm(forms.ModelForm):
     )
       
     supplier = forms.ModelChoiceField(
-        label='Proovedor',
+        label='Proveedor',
         required=True,
         queryset=Asset.objects.filter(status=1,type=2),
         empty_label='-- Selecciona --',
@@ -174,7 +174,7 @@ class InventoryCodeFilterForm(forms.Form):
         help_text='filter_option',
         required=False,
         queryset=Asset.objects.filter(status=1,type=2),
-        empty_label='-- Proovedor --',
+        empty_label='-- Proveedor --',
         widget=forms.Select(attrs={
             'class':'form-control',
         })
