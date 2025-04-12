@@ -2,66 +2,53 @@
 <div class="col-lg-12">
     <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-center">
-
-            {# Previus button #}
-            {% if page_obj.has_previous  %}
+            {# Render(First button) #}
+            {% if page_obj.has_previous %}
+                {% querystring_without_page as clean_query %}
                 <li class="page-item">
-                    <a class="page-link" href="?page={{page_obj.previous_page_number}}" aria-label="Previous">
+                    <a class="page-link" href="?{% if clean_query %}{{clean_query}}&{% endif %}page={{page_obj.previous_page_number}}">
                         <span aria-hidden="true">&laquo;</span>
                     </a>
                 </li>
             {% endif %}
 
-            {# Render page#1 #}
+            {# Render(Always display first page number) #}
             {% if page_obj.number > 3 %}
-                <li class="page-item"><a class="page-link" href="?page=1">1</a></li>
+                {% querystring_without_page as clean_query %}
+                <li class="page-item"><a class="page-link" href="?{% if clean_query %}{{clean_query}}&{% endif %}page=1">1</a></li>
                 {% if page_obj.number > 4 %}
                     <li class="page-item disabled"><span class="page-link">…</span></li>
                 {% endif %}
             {% endif %}
 
-            {# Dynamic pagination #}
-            {% with request.GET.urlencode as query_params %}
-                {% if query_params %}
-                    {% with query_params|cut:"page="|cut:"&page=" as clean_params %}
-                        {% querystring_without_page as clean_query %}
-                        {% for num in page_obj.paginator.page_range %}
-                            {% if num >= page_obj.number|add:"-2" and num <= page_obj.number|add:"2" %}
-                                {% if num == page_obj.number %}
-                                    <li class="page-item active"><span class="page-link">{{ num }}</span></li>
-                                {% else %}
-                                    <li class="page-item">
-                                        <a class="page-link" href="?page={{ num }}{% if clean_query %}&{{ clean_query }}{% endif %}">{{ num }}</a>
-                                    </li>
-                                {% endif %}
-                            {% endif %}
-                        {% endfor %}
-                    {% endwith %}
-                {% else %}
-                    {% for num in page_obj.paginator.page_range %}
-                        {% if num >= page_obj.number|add:"-2" and num <= page_obj.number|add:"2" %}
-                            {% if num == page_obj.number %}
-                                <li class="page-item active"><span class="page-link">{{num}}</span></li>
-                            {% else %}
-                                <li class="page-item"><a class="page-link" href="?page={{num}}">{{num}}</a></li>
-                            {% endif %}
-                        {% endif %}
-                    {% endfor %}
+            {# Render(Dynamic pagination) #}
+            {% querystring_without_page as clean_query %}
+            {% for num in page_obj.paginator.page_range %}
+                {% if num >= page_obj.number|add:"-2" and num <= page_obj.number|add:"2" %}
+                    {% if num == page_obj.number %}{# Active page #}
+                        <li class="page-item active"><span class="page-link">{{num}}</span></li>
+                    {% else %}{# render the rest of the pages #}
+                        <li class="page-item">
+                            <a class="page-link" href="?{% if clean_query %}{{clean_query}}&{% endif %}page={{num}}">{{num}}</a>
+                        </li>
+                    {% endif %}
                 {% endif %}
-            {% endwith %}
+            {% endfor %}
 
-            {# Render last page #}
+            {# Render(Always display last page number) #}
             {% if page_obj.number < page_obj.paginator.num_pages|add:'-2' %}
                 {% if page_obj.number < page_obj.paginator.num_pages|add:'-3' %}
                     <li class="page-item disabled"><span class="page-link">…</span></li>
                 {% endif %}
-                <li class="page-item"><a class="page-link" href="?page={{page_obj.paginator.num_pages}}">{{page_obj.paginator.num_pages}}</a></li>
+                {% querystring_without_page as clean_query %}
+                <li class="page-item"><a class="page-link" href="?{% if clean_query %}{{clean_query}}&{% endif %}page={{page_obj.paginator.num_pages}}">{{page_obj.paginator.num_pages}}</a></li>
             {% endif %}
 
-            {# Last button #}
+            {# Render(Last button) #}
             {% if page_obj.has_next %}
+                {% querystring_without_page as clean_query %}
                 <li class="page-item">
-                    <a class="page-link" href="?page={{page_obj.next_page_number}}" aria-label="Next">
+                    <a class="page-link" href="?{% if clean_query %}{{clean_query}}&{% endif %}page={{page_obj.next_page_number}}">
                         <span aria-hidden="true">&raquo;</span>
                     </a>
                 </li>

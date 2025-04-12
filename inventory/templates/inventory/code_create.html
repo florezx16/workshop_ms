@@ -11,7 +11,7 @@
                         <a href='{% url "inventory:grid_code" %}' class="btn btn-warning"><i class="bi bi-arrow-left"></i> Volver al listado de códigos</a>
                     <hr>
                     {% include 'message.html' %}
-                    <form method='post' novalidate>
+                    <form method='post' enctype="multipart/form-data" novalidate>
                         {% csrf_token %}
                         {% for field in form %}
                             <div class='mb-3'>

@@ -51,19 +51,25 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                    {% for row in assets %}
-                                        <tr>
-                                            <td scope="row"><a href="{% url 'assets:update' row.id %}">{{row.document_id}}</a></td>
-                                            <td>{{row.name}}</td>
-                                            <td><span class="badge text-bg-{{row.type|assetTypeColor}}">{{row.get_type_display}}</span></td>
-                                            <td>{{row.email}}</td>
-                                            <td>{{row.phone}}</td>
-                                            <td>
-                                                <span><a href="{% url 'assets:update' row.id %}" title='Actualizar'><i class="bi bi-pencil"></i></a></span>
-                                                <span><a href="{% url 'assets:delete' row.id %}" title='Eliminar'><i class="bi bi-trash"></i></a></span>
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
+                                    {% if assets|length > 0 %}
+                                        {% for row in assets %}
+                                            <tr>
+                                                <td scope="row"><a href="{% url 'assets:update' row.id %}">{{row.document_id}}</a></td>
+                                                <td>{{row.name}}</td>
+                                                <td><span class="badge text-bg-{{row.type|assetTypeColor}}">{{row.get_type_display}}</span></td>
+                                                <td>{{row.email}}</td>
+                                                <td>{{row.phone}}</td>
+                                                <td>
+                                                    <span><a href="{% url 'assets:update' row.id %}" title='Actualizar'><i class="bi bi-pencil"></i></a></span>
+                                                    <span><a href="{% url 'assets:delete' row.id %}" title='Eliminar'><i class="bi bi-trash"></i></a></span>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        {% else %}
+                                            <tr>
+                                                <td colspan='7' class='text-center fw-bold'>Resultados no encontrados...</td>
+                                            </tr>
+                                    {% endif %}
                                 </tbody>
                             </table>
                         </div>

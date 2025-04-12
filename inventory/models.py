@@ -53,9 +53,9 @@ class InventoryCodes(models.Model):
 class Inventory(models.Model):         
     code = models.ForeignKey(verbose_name='Código', to=InventoryCodes, on_delete=models.PROTECT)
     available_quantity = models.IntegerField(verbose_name='Cantidad disponible', default=0, blank=True)
-    extra_info = models.TextField(verbose_name='Información adicional')
+    extra_info = models.TextField(verbose_name='Información adicional', blank=True, null=True)
     status = models.IntegerField(verbose_name='Estado',choices=Status.choices, default=Status.enable)
-    createtime = models.DateTimeField(verbose_name='Fecha/hora de creación', auto_now_add=True) 
+    createtime = models.DateTimeField(verbose_name='Fecha/hora de creación', auto_now_add=True)
     updatetime = models.DateTimeField(verbose_name='Fecha/hora de modificación', auto_now=True)
 
     class Meta:
