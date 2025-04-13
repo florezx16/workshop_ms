@@ -1,7 +1,7 @@
 from django.db.models import Q
 from django.utils.timezone import make_aware
 from inventory.models import Inventory,InventoryMovement
-from service_order.models import ServiceOrder
+from service_order.models import ServiceOrder, ServiceOrderImages
 
 from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
@@ -137,5 +137,9 @@ def barChart_widgetData():
 def getLastInventoryMovements():
     query = InventoryMovement.objects.filter(status=1)[:5]
     return query
+
+def getOrderImagesByFlowStatus(flowStatus,serviceOrderInstance):
+    queryResult = ServiceOrderImages.objects.filter(service_order=serviceOrderInstance,flowStatus_related=flowStatus,status=1)
+    return queryResult
 
     

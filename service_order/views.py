@@ -6,7 +6,7 @@ from django.utils import timezone
 from django.db.models import Q
 from .models import ServiceOrder, ServiceOrderImages, ServiceOrderConsumption
 from .forms import *
-from core.utils import PrepareFilters
+from core.utils import PrepareFilters, getOrderImagesByFlowStatus
 from .utils import SetNextFlowStatus
 from assets.models import Asset
 from core.models import CoreInformation
@@ -38,7 +38,7 @@ class ServiceOrder_ListView(ListView):
                 messages.error(request=self.request,message='Tus filtros presentan algunas inconsistencias, por favor revisalos e intentalo nuevamente.')
         
         #No GET request
-        queryset = ServiceOrder.objects.filter(status = 1)
+        queryset = ServiceOrder.objects.filter(status=1)
         return queryset
     
     def get_context_data(self, **kwargs):
@@ -70,11 +70,14 @@ class ServiceOrder_DetailView(DetailView):
     model = ServiceOrder
     template_name = 'service_order/serviceOrder_details.html'
     context_object_name = 'serviceOrder '
+    queryset = ServiceOrder.objects.filter(status=1)
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['active_link'] = 'service_orders'
         context['serviceOrder'] = self.object
+        context['diagnoseImages'] = getOrderImagesByFlowStatus('diagnose',self.get_object())
+        context['repairImgaes'] = getOrderImagesByFlowStatus('repair',self.get_object())
         return context
 
 class ServiceOrder_DeleteView(TemplateView):
@@ -82,13 +85,13 @@ class ServiceOrder_DeleteView(TemplateView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        service_order = get_object_or_404(ServiceOrder,id=self.kwargs['serviceOrder_id'])
+        service_order = get_object_or_404(ServiceOrder,id=self.kwargs['serviceOrder_id'],status=1)
         context['serviceOrder'] = service_order
         context['active_link'] = 'service_orders'
         return context
     
     def post(self, request, *args, **kwargs):
-        service_order = get_object_or_404(ServiceOrder,id=self.kwargs['serviceOrder_id'])
+        service_order = get_object_or_404(ServiceOrder,id=self.kwargs['serviceOrder_id'],status=1)
         service_order.status = 0
         service_order.save()
         messages.success(request=self.request,message='La orden de servicio se ha deshabilitado de manera exitosa.')
@@ -99,6 +102,7 @@ class ServiceOrder_UpdateView(UpdateView):
     template_name = "service_order/serviceOrder_workFlow.html"
     context_object_name = 'service_order'
     success_url = reverse_lazy('service_orders:grid')
+    queryset = ServiceOrder.objects.filter(status=1)
     
     def get_form_class(self):
         currentObject = self.get_object()
@@ -139,6 +143,7 @@ class ServiceOrder_UpdateView(UpdateView):
                 try:
                     ServiceOrderImages.objects.create(
                         service_order = currentObject,
+                        flowStatus_related = 'diagnose' if currentObject.flowStatus == 1 else 'repair',
                         image = image
                     )
                 except Exception as e:
@@ -165,7 +170,7 @@ class ServiceOrder_ReportView(DetailView):
     model = ServiceOrder
     template_name = 'service_order/serviceOrder_report.html'
     context_object_name = 'serviceOrder'
-    
+    queryset = ServiceOrder.objects.filter(status=1,flowStatus=3)
     
     def get_context_data(self, **kwargs):
         #ServiceOrder instance
@@ -187,6 +192,8 @@ class ServiceOrder_ReportView(DetailView):
         context['customer'] = customer
         context['consumblesResults'] = consumblesResults
         context['serviceOrder_Total'] = serviceOrder.services_total + serviceOrder.consumables_total
+        context['diagnoseImages'] = getOrderImagesByFlowStatus('diagnose',serviceOrder)
+        context['repairImgaes'] = getOrderImagesByFlowStatus('repair',serviceOrder)
         return context
     
 class serviceOrder_Cancel(UpdateView):
@@ -195,6 +202,7 @@ class serviceOrder_Cancel(UpdateView):
     template_name = "service_order/serviceOrder_cancel.html"
     context_object_name = 'service_order'
     success_url = reverse_lazy('service_orders:grid')
+    queryset = ServiceOrder.objects.filter(status=1)
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -299,6 +307,7 @@ class ServiceOrder_serviceConfig(UpdateView):
     context_object_name = 'service_order'
     success_url = reverse_lazy('service_orders:grid')
     form_class = serviceOrders_ServiceConfigForm
+    queryset = ServiceOrder.objects.filter(status=1)
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

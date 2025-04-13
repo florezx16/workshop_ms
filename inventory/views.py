@@ -40,7 +40,7 @@ class InventoryCodesListView(ListView):
                 messages.error(request=self.request,message='Tus filtros presentan algunas inconsistencias, por favor revisalos e intentalo nuevamente.')
             
         #No GET request
-        queryset = InventoryCodes.objects.filter(status = 1)
+        queryset = InventoryCodes.objects.filter(status=1)
         return queryset
     
 class InventoryCodesCreateView(CreateView):
@@ -69,6 +69,7 @@ class InventoryCodesUpdateView(UpdateView):
     form_class = InventoryCodeMainForm
     context_object_name = 'code'
     success_url = reverse_lazy('inventory:grid_code')
+    queryset = InventoryCodes.objects.filter(status=1)
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -95,14 +96,14 @@ class InventoryCodesDeleteView(TemplateView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        code = get_object_or_404(InventoryCodes,id=self.kwargs['pk'])
+        code = get_object_or_404(InventoryCodes,id=self.kwargs['pk'],status=1)
         context['active_link'] = 'code_mngt'
         context['dropdown_menu'] = True
         context['code'] = code
         return context
     
     def post(self, request, *args, **kwargs):
-        code = get_object_or_404(InventoryCodes,id=self.kwargs['pk'])
+        code = get_object_or_404(InventoryCodes,id=self.kwargs['pk'],status=1)
         code.status = 0
         code.save()
         messages.success(request=self.request,message='El código se ha deshabilitado de manera exitosa.')
@@ -136,7 +137,7 @@ class InventoryListView(ListView):
                 messages.error(request=self.request,message='Tus filtros presentan algunas inconsistencias, por favor revisalos e intentalo nuevamente.')
             
         #No GET request
-        queryset = Inventory.objects.filter(status = 1)
+        queryset = Inventory.objects.filter(status=1)
         return queryset
 
 class InventoryCreateView(CreateView):
@@ -158,41 +159,20 @@ class InventoryCreateView(CreateView):
     def form_invalid(self, form):
         messages.error(request=self.request,message='El formulario presenta algunos errores, por favor verificarlos e intentalo nuevamente.')
         return super().form_invalid(form)
-    
-class InventoryUpdateView(UpdateView):
-    model = Inventory
-    template_name = "inventory/inventory_update.html"
-    form_class = InventoryMainForm
-    context_object_name = 'inventory_item'
-    success_url = reverse_lazy('inventory:grid')
-    
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['active_link'] = 'inventory'
-        context['dropdown_menu'] = True
-        return context
-    
-    def form_valid(self, form):
-        messages.success(request=self.request,message='El inventario ha sido modificado de manera existosa.')
-        return super().form_valid(form)
-    
-    def form_invalid(self, form):
-        messages.error(request=self.request,message='El formulario presenta algunos errores, por favor verificarlos e intentarlo nuevamente.')
-        return super().form_invalid(form)
-    
+        
 class InventoryDeleteView(TemplateView):
     template_name = 'inventory/inventory_delete.html'
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        code = get_object_or_404(Inventory,id=self.kwargs['pk'])
+        code = get_object_or_404(Inventory,id=self.kwargs['pk'],status=1)
         context['code'] = code
         context['active_link'] = 'inventory'
         context['dropdown_menu'] = True
         return context
     
     def post(self, request, *args, **kwargs):
-        item = get_object_or_404(Inventory,id=self.kwargs['pk'])
+        item = get_object_or_404(Inventory,id=self.kwargs['pk'],status=1)
         item.status = 0
         item.save()
         messages.success(request=self.request,message='El item en del inventario se ha deshabilitado de manera exitosa.')
@@ -258,13 +238,14 @@ class InventoryMovement_ListView(ListView):
                 messages.error(request=self.request,message='Tus filtros presentan algunas inconsistencias, por favor revisalos e intentalo nuevamente.')
             
         #No GET request
-        queryset = InventoryMovement.objects.filter(status = 1)
+        queryset = InventoryMovement.objects.filter(status=1)
         return queryset
     
 class InventoryMovement_DetailView(DetailView):
     model = InventoryMovement
     context_object_name = 'movement'
     template_name = 'inventory/inventoryMovement_detail.html'
+    queryset = InventoryMovement.objects.filter(status=1)
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

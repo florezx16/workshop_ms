@@ -63,6 +63,23 @@
                                     <input type="text" class="form-control" disabled value='{{serviceOrder.diagnose_date}}'>
                                 </div>
 
+                                <div class='mb-3'>
+                                    <label class='form-label fw-bold'>Imagenes relacionadas al diagnostico:</label>
+                                    <div class='imagex_box'>
+                                        <div>
+                                            {% if diagnoseImages|length > 0 %}
+                                                <span class='form-text'><strong>&emsp;Previsualización:</strong></span>
+                                                <br>
+                                                {% for record in diagnoseImages %}
+                                                    <img class='img-thumbnail mt-2' src="{{record.image.url}}" alt="reference image" width="350" height="200">
+                                                {% endfor %}
+                                                {% else %}
+                                                    <span style='color:#f36363;' class='form-text'><strong>&emsp;&emsp;No se han relacionado imagenes...</strong></span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div class="mb-3">
                                     <label class='form-label fw-bold'>Observaciones:</label>
                                     <textarea cols="40" rows="3" class="form-control" style="max-width:500px;" maxlength="300" disabled>{{serviceOrder.diagnose_comments}}</textarea>
@@ -75,6 +92,23 @@
                                 <div class='mb-3'>
                                     <label class='form-label fw-bold'>Fecha de reparacion:</label>
                                     <input type="text" class="form-control" disabled value='{{serviceOrder.repair_date}}'>
+                                </div>
+
+                                <div class='mb-3'>
+                                    <label class='form-label fw-bold'>Imagenes relacionadas a la reparación:</label>
+                                    <div class='imagex_box'>
+                                        <div>
+                                            {% if repairImgaes|length > 0 %}
+                                                <span class='form-text'><strong>&emsp;Previsualización:</strong></span>
+                                                <br>
+                                                {% for record in repairImgaes %}
+                                                    <img class='img-thumbnail mt-2' src="{{record.image.url}}" alt="reference image" width="350" height="200">
+                                                {% endfor %}
+                                                {% else %}
+                                                    <span style='color:#f36363;' class='form-text'><strong>&emsp;&emsp;No se han relacionado imagenes...</strong></span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div class="mb-3">

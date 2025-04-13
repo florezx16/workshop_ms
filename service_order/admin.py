@@ -13,7 +13,7 @@ admin.site.register(ServiceOrder, ServiceOrderAdmin)
 admin.site.site_title = "Gestión de Servicios"
 
 class ServiceOrderImageAdmin(admin.ModelAdmin):
-    list_display = ['id','service_order','image','createtime','status']
+    list_display = ['id','service_order','flowStatus_related','image','createtime','status']
     readonly_fields = ['createtime','updatetime']
     list_filter = ['status']
     ordering = ['id']
