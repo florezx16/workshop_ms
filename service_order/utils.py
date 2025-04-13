@@ -31,6 +31,7 @@ def get_serviceOrder_imagePath(instance,filename):
     flowStatus = MappingFlowStatus(instance.service_order)
     path = f'service_order/{instance.service_order.id}/{flowStatus}/{newFileName}'
     return path
+
  
 
     

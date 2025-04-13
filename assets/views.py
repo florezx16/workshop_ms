@@ -78,7 +78,8 @@ class AssetUpdateView(UpdateView):
     form_class = AssetMainForm
     context_object_name = 'asset'
     success_url = reverse_lazy('assets:grid')
-    
+    queryset = Asset.objects.filter(status=1)
+        
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['active_link'] = 'assets'
@@ -97,13 +98,13 @@ class AssetDeleteView(TemplateView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        asset = get_object_or_404(Asset,id=self.kwargs['asset_id'])
+        asset = get_object_or_404(Asset,id=self.kwargs['asset_id'],status=1)
         context['asset'] = asset
         context['active_link'] = 'assets'
         return context
     
     def post(self, request, *args, **kwargs):
-        asset = get_object_or_404(Asset,id=self.kwargs['asset_id'])
+        asset = get_object_or_404(Asset,id=self.kwargs['asset_id'],status=1)
         asset.status = 0
         asset.save()
         messages.success(request=self.request,message='El Asset se ha deshabilitado de manera exitosa.')

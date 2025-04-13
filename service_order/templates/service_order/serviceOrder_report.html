@@ -115,16 +115,19 @@
                         <tr class='table-primary'>
                             <th colspan='3' class='table-primary text-center'>Evidencias adicionales</th>
                         </tr>
-                        <!--
-                        <tr>
-                            <th>1</th>
-                            <th>2</th>
-                            <th>3</th>
-                        </tr>
-                        -->
-                        <tr>
-                            <th colspan='3' class='text-center'>N/A</th>
-                        </tr>
+                        {% if diagnoseImages|length > 0 %}
+                            <tr>
+                                {% for record in diagnoseImages %}
+                                    <th class='text-center'>
+                                        <img class='img-fluid' src="{{record.image.url}}" width="150" height="150">
+                                    </th>
+                                {% endfor %}
+                            </tr>
+                            {% else %}
+                                <tr>
+                                    <th colspan='3' class='text-center'>N/A</th>
+                                </tr>
+                        {% endif %}                     
                     </table>
                 </div>
             </div>
@@ -149,16 +152,19 @@
                         <tr class='table-primary'>
                             <th colspan='3' class='table-primary text-center'>Evidencias adicionales</th>
                         </tr>
-                        <!--
-                        <tr>
-                            <th>1</th>
-                            <th>2</th>
-                            <th>3</th>
-                        </tr>
-                        -->
-                        <tr>
-                            <th colspan='3' class='text-center'>N/A</th>
-                        </tr>
+                        {% if repairImgaes|length > 0 %}
+                            <tr>
+                                {% for record in repairImgaes %}
+                                    <th class='text-center'>
+                                        <img class='img-fluid' src="{{record.image.url}}" width="150" height="150">
+                                    </th>
+                                {% endfor %}
+                            </tr>
+                            {% else %}
+                                <tr>
+                                    <th colspan='3' class='text-center'>N/A</th>
+                                </tr>
+                        {% endif %}  
                     </table>
                 </div>
             </div>
