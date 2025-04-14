@@ -1,0 +1,19 @@
+# Python cache files
+__pycache__/
+*.py[cod]
+
+# Migrations files (except __init__.py)
+**/migrations/
+!**/migrations/__init__.py
+
+# Temp files
+*.log
+*.pot
+*.mo
+*.swp
+*.sqlite3
+db.sqlite3
+
+# Media folder(Its create automatically)
+media/
+
