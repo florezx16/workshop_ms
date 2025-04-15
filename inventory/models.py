@@ -37,7 +37,7 @@ class InventoryCodes(models.Model):
     inbound_price = models.FloatField(verbose_name='Precio venta', default=0)
     outbound_price = models.FloatField(verbose_name='Precio compra', default=0)
     extra_info = models.TextField(verbose_name='Información adicional')
-    related_image = models.ImageField(verbose_name='Imagen de referencia', upload_to=get_inventory_imagePath, default='default/default.png')
+    related_image = models.ImageField(verbose_name='Imagen de referencia', upload_to=get_inventory_imagePath, default='../static/img/default.png')
     status = models.IntegerField(verbose_name='Estado',choices=Status.choices, default=Status.enable)
     createtime = models.DateTimeField(verbose_name='Fecha/hora de creación', auto_now_add=True) 
     updatetime = models.DateTimeField(verbose_name='Fecha/hora de modificación', auto_now=True)
